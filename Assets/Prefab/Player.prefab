@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 119921190}
   - component: {fileID: 119921189}
   - component: {fileID: 119921188}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingOrder: 5
   m_Sprite: {fileID: 4334783836991956000, guid: 765b3ceb2d4681b41bd305c454a41071, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 2, y: 2}
@@ -160,7 +160,7 @@ MonoBehaviour:
   collider2D: {fileID: 0}
   rigidbody2D: {fileID: 0}
   jumpForce: 1100
-  bubble: {fileID: 0}
+  bubble: {fileID: 448797218365540072, guid: 1c788648f80d5294db1df52eafe6193a, type: 3}
   bubbleSpawnPos: {fileID: 7156612519854105566}
   minX: -12.3
   maxX: 12.3
@@ -173,7 +173,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7156612519854105566}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpawnPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,7 +188,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5210198225511595242}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.02, y: 0.01, z: 0}
+  m_LocalPosition: {x: 1.33, y: -0.38, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6855123669501228324}

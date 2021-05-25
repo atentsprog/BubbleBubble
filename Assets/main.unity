@@ -4243,60 +4243,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c788648f80d5294db1df52eafe6193a, type: 3}
---- !u!1 &3174203666797768751 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 448797218365540072, guid: 1c788648f80d5294db1df52eafe6193a, type: 3}
-  m_PrefabInstance: {fileID: 3174203666797768750}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3174203666797768752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3174203666797768751}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2de70ddf7f860b244825bb735bb588d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!58 &3174203666797768753
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3174203666797768751}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 1
---- !u!50 &3174203666797768754
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3174203666797768751}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1001 &6775391603752041457
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4314,11 +4260,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6855123669501228324, guid: e62a2b3f7b9c22441a800c772604a33c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.68
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 6855123669501228324, guid: e62a2b3f7b9c22441a800c772604a33c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.83
+      value: -11.7
       objectReference: {fileID: 0}
     - target: {fileID: 6855123669501228324, guid: e62a2b3f7b9c22441a800c772604a33c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4351,6 +4297,14 @@ PrefabInstance:
     - target: {fileID: 6855123669501228324, guid: e62a2b3f7b9c22441a800c772604a33c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7156612519854105566, guid: e62a2b3f7b9c22441a800c772604a33c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 7156612519854105566, guid: e62a2b3f7b9c22441a800c772604a33c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.38
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e62a2b3f7b9c22441a800c772604a33c, type: 3}

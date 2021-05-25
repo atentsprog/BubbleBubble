@@ -55,7 +55,7 @@ public class Player : MonoBehaviour
             Instantiate(bubble, bubbleSpawnPos.position, transform.rotation);
         }
     }
-    public float minX, maxX;
+    public float minX = -12.3f, maxX = 12.3f;
     private void Move()
     {
         float moveX = 0;
@@ -74,7 +74,7 @@ public class Player : MonoBehaviour
             {
                 //moveX 양수이면 180 로테이션 아니면 0도 로테이션 적용.
                 float rotateY = 0;
-                if (moveX > 0)
+                if (moveX < 0)
                     rotateY = 180;
 
                 var rotation = transform.rotation;
