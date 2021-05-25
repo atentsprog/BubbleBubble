@@ -7,8 +7,11 @@ public class Player : MonoBehaviour
 {
     public float speed = 0.1f;
     public Animator animator;
+    new public Rigidbody2D rigidbody2D;
+    public float jumpForce = 100f;
     private void Awake()
     {
+        rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         Application.targetFrameRate = 60;
     }
@@ -18,7 +21,20 @@ public class Player : MonoBehaviour
 
         // WASD, A왼쪽,, D오른쪽
         Move();
+
+        // 점프
+        Jump();
     }
+
+    private void Jump()
+    {
+        // J키 누르면 점프 하자.
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            rigidbody2D.AddForce(new Vector2(0, jumpForce));
+        }
+    }
+
     public GameObject bubble;
     public Transform bubbleSpawnPos;
     private void FireBubble()
