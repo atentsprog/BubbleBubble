@@ -39,9 +39,11 @@ public class Player : MonoBehaviour
         //스페이스키 누르면 앞으로 버블 발사.
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            Instantiate(bubbleGo, transform.position, transform.rotation);
+            Instantiate(bubbleGo, bubblePosition.position, transform.rotation);
         }
     }
+
+    public Transform bubblePosition;
 
     private void Move()
     {
@@ -60,7 +62,7 @@ public class Player : MonoBehaviour
             {
                 animator.Play("run");
                 var rotate = transform.rotation;
-                rotate.y = moveX > 0 ? 180 : 0;
+                rotate.y = moveX < 0 ? 180 : 0;
                 transform.rotation = rotate;
                 //spriteRenderer.flipX = moveX > 0;
             }
