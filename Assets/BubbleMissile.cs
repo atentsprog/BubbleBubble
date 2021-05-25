@@ -19,18 +19,21 @@ public class BubbleMissile : MonoBehaviour
     public float gravityScale = -0.5f;
     public float randomX = 1;
     public float randomY = 1;
-    void Start()
+    IEnumerator Start()
     {
         animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
         collider2D = GetComponent<Collider2D>();
         rigidbody2D.gravityScale = 0;
 
-        //for (int i = 0; i < moveFrame; i++)
-        //{
-        //    transform.Translate(speed, 0, 0);
-        //    yield return null;
-        //} // 중력장을 찾아 이동하자. -> 맵마다 달랐음.
+        for (int i = 0; i < moveFrame; i++)
+        {
+            transform.Translate(speed, 0, 0);
+            yield return null;
+        }
+        rigidbody2D.gravityScale = gravityScale;
+        rigidbody2D.AddForce(new Vector2(Random.Range(-randomX, randomX), Random.Range(-randomY, randomY)));
+        // 중력장을 찾아 이동하자. -> 맵마다 달랐음.
         // 중력장이 1개 이상인 곳도 있었음.
         //// 가장가까운 중력장을 찾자. 
         //// 중력장을 바라보자
@@ -38,25 +41,9 @@ public class BubbleMissile : MonoBehaviour
         /// 앞방향으로 힘을 가해서 이동시키자.
 
     }
-    private void FixedUpdate()
-    {
-        if (currentFrame++ < moveFrame)
-        {
-            var pos = rigidbody2D.position;
-            pos.x += speed * transform.forward.z;
-            rigidbody2D.position = pos;
-        }
-        else
-        {
-            rigidbody2D.gravityScale = gravityScale;
-            rigidbody2D.AddForce(new Vector2(Random.Range(-randomX, randomX), Random.Range(-randomY, randomY)));
-
-        }
-    }
 
     public float speed = 1;
     public int moveFrame = 4;
-    public int currentFrame;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
