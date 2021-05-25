@@ -27,8 +27,6 @@ public class Player : MonoBehaviour
         // 점프
         Jump();
     }
-
-    // 공중에서 점프를 막고 싶다.
     
     private void Jump()
     {
@@ -36,7 +34,7 @@ public class Player : MonoBehaviour
         if(rigidbody2D.velocity.y < 0)
             collider2D.isTrigger = false;
 
-        if(rigidbody2D.velocity.y == 0)
+        if(rigidbody2D.velocity.y == 0) // 공중에서 점프를 막고 싶다.
         { 
             // 방향위혹은 W키 누르면 점프 하자.
             if (Input.GetKeyDown(KeyCode.W)|| Input.GetKeyDown(KeyCode.UpArrow))
@@ -57,7 +55,7 @@ public class Player : MonoBehaviour
             Instantiate(bubble, bubbleSpawnPos.position, transform.rotation);
         }
     }
-
+    public float minX, maxX;
     private void Move()
     {
         float moveX = 0;
@@ -66,6 +64,8 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) moveX = 1;
         Vector3 position = transform.position;
         position.x = position.x + moveX * speed;
+        position.x = Mathf.Max(minX, position.x);
+        position.x = Mathf.Min(maxX, position.x);
         transform.position = position;
 
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack") == false)
