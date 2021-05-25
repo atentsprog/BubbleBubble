@@ -6,81 +6,85 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float speed = 0.1f;
-
-    new public Collider2D collider;
-    new public Rigidbody2D rigidbody2D;
     public Animator animator;
-    public SpriteRenderer spriteRenderer;
-    private void Start()
+    new public Collider2D collider2D;
+    new public Rigidbody2D rigidbody2D;
+    public float jumpForce = 100f;
+    private void Awake()
     {
-        Application.targetFrameRate = 60;
-        collider = GetComponent<Collider2D>();
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        collider2D = GetComponent<Collider2D>();
+        Application.targetFrameRate = 60;
     }
-
-    public bool isGround = true;
-    public float jumpForce = 10;
-
-    float previousY;
     private void Update()
     {
         FireBubble();
 
-        Jump();
-
+        // WASD, A왼쪽,, D오른쪽
         Move();
-    }
 
-    public GameObject bubbleGo;
-    private void FireBubble()
+        // 점프
+        Jump();
+    }
+    
+    private void Jump()
     {
-        //스페이스키 누르면 앞으로 버블 발사.
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            Instantiate(bubbleGo, transform.position, transform.rotation);
+        // 낙하할때는 지면과 충돌하도록 isTrigger를 꺼주자.
+        if(rigidbody2D.velocity.y < 0)
+            collider2D.isTrigger = false;
+
+        if(rigidbody2D.velocity.y == 0) // 공중에서 점프를 막고 싶다.
+        { 
+            // 방향위혹은 W키 누르면 점프 하자.
+            if (Input.GetKeyDown(KeyCode.W)|| Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                rigidbody2D.AddForce(new Vector2(0, jumpForce));
+                collider2D.isTrigger = true; // 점프할때 벽을 뚫고 싶다.
+            }
         }
     }
 
+    public GameObject bubble;
+    public Transform bubbleSpawnPos;
+    private void FireBubble()
+    {
+        // 스페이스 누르면 버블 날리기.
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Instantiate(bubble, bubbleSpawnPos.position, transform.rotation);
+        }
+    }
+    public float minX = -12.3f, maxX = 12.3f;
     private void Move()
     {
-        // AD, A왼쪽, D오른쪽
         float moveX = 0;
 
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) moveX = -1;
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) moveX = 1;
         Vector3 position = transform.position;
         position.x = position.x + moveX * speed;
+        position.x = Mathf.Max(minX, position.x);
+        position.x = Mathf.Min(maxX, position.x);
         transform.position = position;
 
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("attack") == false)
         {
             if (moveX != 0)
             {
+                //moveX 양수이면 180 로테이션 아니면 0도 로테이션 적용.
+                float rotateY = 0;
+                if (moveX < 0)
+                    rotateY = 180;
+
+                var rotation = transform.rotation;
+                rotation.y = rotateY;
+                transform.rotation = rotation;
+
                 animator.Play("run");
-                var rotate = transform.rotation;
-                rotate.y = moveX > 0 ? 180 : 0;
-                transform.rotation = rotate;
-                //spriteRenderer.flipX = moveX > 0;
             }
             else
                 animator.Play("idle");
-        }
-    }
-
-    private void Jump()
-    {
-        if (previousY > transform.position.y)
-            collider.isTrigger = false;
-        previousY = transform.position.y;
-
-        // 점프
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            rigidbody2D.AddForce(new Vector2(0, jumpForce));
-            collider.isTrigger = true;
-            isGround = false;
         }
     }
 }
