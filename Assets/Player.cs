@@ -7,12 +7,14 @@ public class Player : MonoBehaviour
 {
     public float speed = 0.1f;
     public Animator animator;
+    new public Collider2D collider2D;
     new public Rigidbody2D rigidbody2D;
     public float jumpForce = 100f;
     private void Awake()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        collider2D = GetComponent<Collider2D>();
         Application.targetFrameRate = 60;
     }
     private void Update()
@@ -26,12 +28,22 @@ public class Player : MonoBehaviour
         Jump();
     }
 
+    // 공중에서 점프를 막고 싶다.
+    
     private void Jump()
     {
-        // J키 누르면 점프 하자.
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            rigidbody2D.AddForce(new Vector2(0, jumpForce));
+        // 낙하할때는 지면과 충돌하도록 isTrigger를 꺼주자.
+        if(rigidbody2D.velocity.y < 0)
+            collider2D.isTrigger = false;
+
+        if(rigidbody2D.velocity.y == 0)
+        { 
+            // 방향위혹은 W키 누르면 점프 하자.
+            if (Input.GetKeyDown(KeyCode.W)|| Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                rigidbody2D.AddForce(new Vector2(0, jumpForce));
+                collider2D.isTrigger = true; // 점프할때 벽을 뚫고 싶다.
+            }
         }
     }
 
