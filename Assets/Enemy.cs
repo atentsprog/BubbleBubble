@@ -9,12 +9,15 @@ public class Enemy : MonoBehaviour
     public float gravitiScale = 1;
 
     public float speed = 0.1f;
-    IEnumerator Start()
+    void Awake()
     {
         collider = GetComponent<Collider2D>();
         rigidbody = GetComponent<Rigidbody2D>();
-        // 지형 만날때까지 아래로 떨어지자.
+    }
 
+    // 지형 만날때까지 아래로 떨어지자.
+    IEnumerator MoveCo()
+    { 
         Collider2D[] collider2Ds = new Collider2D[4];
         ContactFilter2D contactFilter2D = new ContactFilter2D();
         int collidCount = 0;
@@ -29,11 +32,24 @@ public class Enemy : MonoBehaviour
         // 무한히 좌우를 왔다 갔다하자.
         // todo:가끔 절벽쪽으로 점프 해야함.
         //오른쪽부터 이동하자. 끝에 땋을때까지 이동하자.
+        //이전 위치랑 같으면 방향을 회전하자.
+        float previousX = 0; 
         while (true)
         {
+            previousX = transform.position.x;
             transform.Translate(speed, 0, 0);
             yield return null;
+            if (Mathf.Abs( previousX - transform.position.x) < minimumMove)
+            {
+                transform.Rotate(0, 180, 0);
+            }
         }
+    }
+    public float minimumMove = 0.001f;
+
+    private void OnEnable()
+    {
+        StartCoroutine(MoveCo());
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1450959650}
   m_Layer: 0
   m_Name: EnemyA
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -157,6 +157,4 @@ MonoBehaviour:
   collider: {fileID: 0}
   rigidbody: {fileID: 0}
   gravitiScale: 1
-  leftLimit: 0
-  rightLimit: 0
-  speed: 0.1
+  speed: -0.05

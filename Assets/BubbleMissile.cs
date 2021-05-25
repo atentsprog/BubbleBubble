@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// 버블 이동 방식
@@ -16,6 +17,8 @@ public class BubbleMissile : MonoBehaviour
     new public Rigidbody2D rigidbody2D;
     new public Collider2D collider2D;
     public float gravityScale = -0.5f;
+    public float randomX = 1;
+    public float randomY = 1;
     IEnumerator Start()
     {
         animator = GetComponent<Animator>();
@@ -29,7 +32,7 @@ public class BubbleMissile : MonoBehaviour
             yield return null;
         }
         rigidbody2D.gravityScale = gravityScale;
-
+        rigidbody2D.AddForce(new Vector2(Random.Range(-randomX, randomX), Random.Range(-randomY, randomY)));
         // 중력장을 찾아 이동하자. -> 맵마다 달랐음.
         // 중력장이 1개 이상인 곳도 있었음.
         //// 가장가까운 중력장을 찾자. 
@@ -49,7 +52,7 @@ public class BubbleMissile : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        Debug.Log(other.transform.name + " Collision 부딛힘");
+        //Debug.Log(other.transform.name + " Collision 부딛힘");
 
         if (state == State.Normal)
         {
@@ -78,7 +81,7 @@ public class BubbleMissile : MonoBehaviour
         for (int i = 1; i <= explosionTimer.Length; i++)
         {
             animator.Play(prefix + i);
-            yield return new WaitForSeconds(explosionTimer[i]);
+            yield return new WaitForSeconds(explosionTimer[i-1]);
         }
 
         // 몬스터 해방.

@@ -118,11 +118,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e5159bea904b54187bd5aad15b47ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
   rigidbody2D: {fileID: 0}
   collider2D: {fileID: 0}
   gravityScale: -0.5
+  randomX: 100
+  randomY: 100
   speed: -4
   moveFrame: 4
+  caughtTarget: {fileID: 0}
+  explosionTimer: 030000000300000003000000
+  state: 0
 --- !u!50 &6478110564178541363
 Rigidbody2D:
   serializedVersion: 4
@@ -153,13 +159,13 @@ CircleCollider2D:
   m_GameObject: {fileID: 3204347645493500726}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: bdfa162de58f2a94a84b49193e924cd0, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 2
 --- !u!114 &6757569556035649167
 MonoBehaviour:
   m_ObjectHideFlags: 0
