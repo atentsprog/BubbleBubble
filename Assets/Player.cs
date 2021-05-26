@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -10,13 +11,81 @@ public class Player : MonoBehaviour
     new public Collider2D collider2D;
     new public Rigidbody2D rigidbody2D;
     public float jumpForce = 100f;
+    public float wallOffset = 0.001f;
     private void Awake()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         collider2D = GetComponent<Collider2D>();
         Application.targetFrameRate = 60;
+
+        //minX, maxX값을  인스펙터에서 넣으니깐 제대로 넣지 않을 경우 좌우 벽에 붙어 있는 문제 발생 -> trigger Stage상태 유지.
+        // -> 프로그래밍적으로 할당하자.
+        // 좌우로 레이를 쏘아서 마지막 벽을 min, max로 할당.
+        
+            
+        RaycastHit2D rightmostHit = new RaycastHit2D();
+        RaycastHit2D Leftmost = new RaycastHit2D();
+        RaycastHit2D hit;
+        Vector2 checkPosition = transform.position;
+        int count = 0;
+        List<RaycastHit2D> hits = new List<RaycastHit2D>();
+        float wallWidth = 1.01f;
+        while(count++ < 10) // 최대 10회만 검사.
+        {
+            hit = Physics2D.Raycast(checkPosition, Vector2.right, 100f, wallLayer);
+            if (hit.transform == null)
+                break;
+            hits.Add(hit);
+            rightmostHit = hit; // 마지막 벽이 2중 벽일때 바로 앞에 벽을 마지막 오른쪽 벽으로 하자.
+            checkPosition.x = hit.point.x + wallWidth; //
+        };
+
+        if(hits.Count >= 2)
+        {
+            var previousHit = hits[hits.Count - 2];
+            if (rightmostHit.point.x < previousHit.point.x + wallWidth + 0.01f)
+            {
+                rightmostHit = previousHit;
+            }
+        }
+
+        count = 0;
+        hits.Clear();
+        checkPosition = transform.position;
+        while (count++ < 10) // 최대 10회만 검사.
+        {
+            hit = Physics2D.Raycast(checkPosition, Vector2.left, 100f, wallLayer);
+            if (hit.transform == null)
+                break;
+            hits.Add(hit);
+            Leftmost = hit;
+            checkPosition.x = hit.point.x - 1.01f; // 1.01은 벽 두께
+        };
+
+        if (hits.Count >= 2)
+        {
+            var previousHit = hits[hits.Count - 2];
+            if (Leftmost.point.x > previousHit.point.x - wallWidth - 0.01f)
+            {
+                Leftmost = previousHit;
+
+                if (hits.Count >= 3) // 왼쪽은 3중벽이어서 추가 확인
+                {
+                    previousHit = hits[hits.Count - 3];
+                    if (Leftmost.point.x > previousHit.point.x - wallWidth - 0.01f)
+                    {
+                        Leftmost = previousHit;
+                    }
+                }
+            }
+        }
+
+        float halfSize = collider2D.bounds.size.x * 0.5f + wallOffset;
+        maxX = rightmostHit.point.x - halfSize;
+        minX = Leftmost.point.x + halfSize;
     }
+
     private void Update()
     {
         FireBubble();
