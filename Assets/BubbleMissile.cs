@@ -30,6 +30,7 @@ public class BubbleMissile : MonoBehaviour
         collider2D = GetComponent<Collider2D>();
         rigidbody2D.gravityScale = 0;
         state = State.Fire;
+        int moveFrame = (int)(maxDistance / speed);
         for (int i = 0; i < moveFrame; i++)
         {
             var pos = transform.position;
@@ -60,7 +61,18 @@ public class BubbleMissile : MonoBehaviour
     }
 
     public float speed = 1;
-    public int moveFrame = 4;
+    public float fastSpeed = 0.5f;
+    public float maxDistance = 4;
+    public float longRangemaxDistance = 7;
+
+    internal void Init(bool useFastShot, bool useLongRange)
+    {
+        if (useFastShot)
+            speed = fastSpeed;
+
+        if (useLongRange)
+            maxDistance = longRangemaxDistance;
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {

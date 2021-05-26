@@ -30,20 +30,84 @@ public class Player : MonoBehaviour
         Jump();
 
         Move();
+
+        CheatKey();
+    }
+
+    bool useLongRange = false;
+    bool useRapidFire = false;
+    bool useFastShot = false;
+    public bool UseLongRange
+    {
+        get { return useLongRange; }
+        set {
+            Debug.LogWarning("LongRange:" + value);
+            useLongRange = value; }
+    }
+
+    public float fireSpeedNormal = 0.5f; // 발사후 다른 발사동안 발사키 막힘.
+    public float fireSpeedRapid = 0.2f; // useRapidFire옵션 활성화 되면 적용될 발사 속도
+
+    public bool UseRapidFire
+    {
+        get { return useRapidFire; }
+        set
+        {
+            Debug.LogWarning("RapidFire:" + value); 
+            useRapidFire = value; }
+    }
+
+    public bool UseFastShot
+    {
+        get { return useFastShot; }
+        set
+        {
+            Debug.LogWarning("FastShot:" + value); 
+            useFastShot = value; }
+    }
+
+    public float FireInterval {
+        get { return UseRapidFire ? fireSpeedRapid : fireSpeedNormal; }
+    }
+
+    private void CheatKey()
+    {
+        // 숫자 1롱 레인지.
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            UseLongRange = !UseLongRange;
+
+        // 숫자 2 Rapid Fire
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            UseRapidFire = !UseRapidFire;
+
+        // 숫자 3 패스트 샷.
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            UseFastShot = !UseFastShot;
     }
 
     public GameObject bubbleGo;
+
+    public float nextEnableFireTime = 0;
     private void FireBubble()
     {
-        //스페이스키 누르면 앞으로 버블 발사.
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Time.time > nextEnableFireTime)
         {
-            Instantiate(bubbleGo, bubbelSpawnPos.position, transform.rotation);
+            //스페이스키 누르면 앞으로 버블 발사.
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                BubbleMissile bm = Instantiate(bubbleGo, bubbelSpawnPos.position, transform.rotation)
+                    .GetComponent<BubbleMissile>();
+                bm.Init(UseFastShot, UseLongRange);
+
+                nextEnableFireTime = Time.time + FireInterval;
+            }
         }
     }
     public Transform bubbelSpawnPos;
     public float maxY = 13f;
     public float minX = -12.3f, maxX = 12.3f;
+
+
     private void Move()
     {
         // AD, A왼쪽, D오른쪽
