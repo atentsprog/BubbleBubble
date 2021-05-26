@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 280307440}
   - component: {fileID: 280307439}
   - component: {fileID: 280307441}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4105,7 +4105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 304108858}
   - component: {fileID: 304108857}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4740,6 +4740,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 119921188, guid: e62a2b3f7b9c22441a800c772604a33c, type: 3}
+      propertyPath: downWallCheckY
+      value: -2.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 119921188, guid: e62a2b3f7b9c22441a800c772604a33c, type: 3}
+      propertyPath: wallLayer.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
     - target: {fileID: 522924261565212386, guid: e62a2b3f7b9c22441a800c772604a33c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -4750,7 +4758,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6855123669501228324, guid: e62a2b3f7b9c22441a800c772604a33c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6855123669501228324, guid: e62a2b3f7b9c22441a800c772604a33c, type: 3}
       propertyPath: m_LocalPosition.y

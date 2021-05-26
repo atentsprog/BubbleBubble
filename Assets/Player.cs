@@ -26,13 +26,51 @@ public class Player : MonoBehaviour
 
         // 점프
         Jump();
+
+        // 아래로점프
+        DownJump();
     }
-    
+
+    public LayerMask wallLayer;
+    public float downWallCheckY = -1.1f;
+    private void DownJump()
+    {
+        // s키 누르면 아래로 점프
+        if(Input.GetKeyDown(KeyCode.S))
+        { 
+            // 점프 가능한 상황인지 확인
+            //  아래로 광선을 쏘아서 벽이 있다면 아래로 점프를 하자
+            var hit = Physics2D.Raycast(
+                transform.position + new Vector3(0, downWallCheckY, 0)
+                , new Vector2(0, -1), 100, wallLayer);
+            if (hit.transform)
+            {
+                Debug.Log($"{hit.point}, {hit.transform.name}");
+
+                StartCoroutine(DownJumCo());
+            }
+        }
+    }
+
+    public float downJumpTime = 0.2f;
+    bool ingDownJump = false;
+    private IEnumerator DownJumCo()
+    {
+        ingDownJump = true;
+        collider2D.isTrigger = true;
+        yield return new WaitForSeconds(downJumpTime);
+        collider2D.isTrigger = false;
+        ingDownJump = false;
+    }
+
     private void Jump()
     {
         // 낙하할때는 지면과 충돌하도록 isTrigger를 꺼주자.
-        if(rigidbody2D.velocity.y < 0)
-            collider2D.isTrigger = false;
+        if (ingDownJump == false)
+        {
+            if (rigidbody2D.velocity.y < 0)
+                collider2D.isTrigger = false;
+        }
 
         if(rigidbody2D.velocity.y == 0) // 공중에서 점프를 막고 싶다.
         { 
