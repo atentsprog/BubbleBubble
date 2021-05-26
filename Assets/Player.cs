@@ -62,13 +62,17 @@ public class Player : MonoBehaviour
         }
     }
 
+    bool ingJump = false;
     private void Jump()
     {
         // 낙하할때는 지면과 충돌하도록 isTrigger를 꺼주자.
-        if (ingDownJump == false)
+        if (ingJump)
         {
             if (rigidbody2D.velocity.y < 0)
-                collider2D.isTrigger = false;
+            {
+                ingJump = false;
+                collider2D.isTrigger = false; // 점프하고 나서 뚫은 벽에 서고싶다.
+            }
         }
 
         // 방향위혹은 W키 누르면 점프 하자.
@@ -81,6 +85,7 @@ public class Player : MonoBehaviour
                 rigidbody2D.velocity = Vector2.zero;
                 rigidbody2D.AddForce(new Vector2(0, jumpForce));
                 collider2D.isTrigger = true; // 점프할때 벽을 뚫고 싶다.
+                ingJump = true;
             }
         }
     }
