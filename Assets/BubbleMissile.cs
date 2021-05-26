@@ -100,14 +100,40 @@ public class BubbleMissile : MonoBehaviour
                 {
                     if (otherTr.transform.tag == "Player")
                     {
-                        //플레이어에게 부딪힌다면 터트리자.
-                        //Destroy(gameObject);
-                        //인근의 모든 버블 함게 터트리자.
-                        DestroyNearBubble();
+                        // 플레이어가 버블을 터트리지 않고 점프 하는 상황이라면
+                        // 플레이어가 방향키를 위로 하고 있는 상태에서 부딪힌 지점이 버블의 위쪽이라면
+                        bool isJumpPlayer = IsJumpPlayer(otherTr.transform);
+                        if(isJumpPlayer)
+                        {
+                            // 버블 밟았으니깐 y값 스케일 잠시 줄였다 복구하자(띠용 트윈 효과)
+                        }
+                        else
+                        {
+                            //인근의 모든 버블 함게 터트리자.
+                            DestroyNearBubble();
+                        }
                     }
                 }
                 break;
         }
+    }
+
+
+    public float jumpableDistace = 0.5f;
+    private bool IsJumpPlayer(Transform touchPlayer)
+    {
+        bool isPressJumpKey = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
+        if (isPressJumpKey == false)
+            return false;
+
+        //버블 위치랑 플레이어 위치 비교해서 y값 유효한지 확인하자.
+        float distanceY = touchPlayer.position.y - transform.position.y;
+        if (distanceY < jumpableDistace)
+            return false;
+
+        touchPlayer.GetComponent<Player>().DoJump();
+
+        return true;
     }
 
     public float nearDistance = 4.2f;

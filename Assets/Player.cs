@@ -88,9 +88,15 @@ public class Player : MonoBehaviour
             // 방향위혹은 W키 누르면 점프 하자.
             if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
             {
-                rigidbody2D.AddForce(new Vector2(0, jumpForce));
-                collider.isTrigger = true; // 점프할때 벽을 뚫고 싶다.
+                DoJump();
             }
         }
+    }
+
+    public void DoJump()
+    {
+        rigidbody2D.velocity = Vector2.zero;
+        rigidbody2D.AddForce(new Vector2(0, jumpForce));
+        collider.isTrigger = true; // 점프할때 벽을 뚫고 싶다.
     }
 }
