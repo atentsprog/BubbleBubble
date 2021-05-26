@@ -21,12 +21,15 @@ public class Monster : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        var rotation = transform.rotation;
-        if (rotation.y == 0)
-            rotation.y = 180;
-        else
-            rotation.y = 0;
+        if (collision.transform.CompareTag("TurnTrigger"))
+        {
+            var rotation = transform.rotation;
+            if (rotation.y == 0)
+                rotation.y = 180;
+            else
+                rotation.y = 0;
 
-        transform.rotation = rotation;
+            transform.rotation = rotation;
+        }
     }
 }
