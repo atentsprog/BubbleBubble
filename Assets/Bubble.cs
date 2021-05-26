@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,9 +33,12 @@ public class Bubble : MonoBehaviour
             {
                 //최대 x값 찾자.
                 var hit = Physics2D.Raycast(transform.position, new Vector2(1, 0), 100f, wallLayer);
-                Debug.Assert(hit.transform != null , "만약 이 로그가 보인다면 벽 레이어 지정안한거다, 해결안되면 프로그래머 한테 문의");
-                float maxX = hit.point.x;
-                pos.x = Mathf.Min(pos.x, maxX);
+                Debug.Assert(hit.transform != null , "만약 이 로그가 보인다면 벽 레이어 지정안한거다, 해결안되면 프로그래머 한테 문의", transform);
+                if (hit.transform)
+                {
+                    float maxX = hit.point.x;
+                    pos.x = Mathf.Min(pos.x, maxX);
+                }
             }
             else
             {
@@ -47,15 +51,43 @@ public class Bubble : MonoBehaviour
         }
         else
         {
+            state = State.FreeFly;
             rigidbody2D.gravityScale = gravityScale;
             enabled = false;
         }
     }
 
+    // 버블이 총알인 상태 : 앞으로 빠르게 이동하는 중(몬스터 닿으면 몬스터 잡힘).
+    // 버블이 자유롭게 이동하는 상태 : 플레이어가 닿으면 버블 터짐.
+    // 버블이 터지고 있는 상태 : <- 필요 없는 상태.
+    public enum State
+    {
+        FastMove,
+        FreeFly,
+        //Expolosion,
+    }
+    public State state = State.FastMove;
+    private void OnTouchCoillision(Transform tr)
+    {
+        if (state == State.FreeFly)
+        {
+            if (tr.CompareTag("Player"))
+            {
+                // 플레이어.
+                Destroy(gameObject);
+            }
+        }
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // 버블이 터질만큼 만힝 붙어 있다면 터트리자.
-        //if(collision 이 벽인가?)
-        ////collision.contacts[0].point  와 나와의 거리를 확인하자. -> 특정 값보다 작다면 터트리자.
+        Debug.Log("Collision:" + collision.transform.name);
+
+        //버블이 플레이어에 닿으면 터트리자.
+        OnTouchCoillision(collision.transform);
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("Trigger:" + collision.transform.name);
+        OnTouchCoillision(collision.transform);
     }
 }
