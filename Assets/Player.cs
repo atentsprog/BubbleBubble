@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
     }
 
     public LayerMask wallLayer;
-    public float downWallCheckY = -1.1f;
+    public float downWallCheckY = -2.1f;
     private void DownJump()
     {
         // s키 누르면 아래로 점프
@@ -47,20 +47,19 @@ public class Player : MonoBehaviour
             {
                 Debug.Log($"{hit.point}, {hit.transform.name}");
 
-                StartCoroutine(DownJumCo());
+                ingDownJump = true;
+                collider2D.isTrigger = true;
             }
         }
     }
-
-    public float downJumpTime = 0.2f;
     bool ingDownJump = false;
-    private IEnumerator DownJumCo()
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        ingDownJump = true;
-        collider2D.isTrigger = true;
-        yield return new WaitForSeconds(downJumpTime);
-        collider2D.isTrigger = false;
-        ingDownJump = false;
+        if (ingDownJump)
+        {
+            ingDownJump = false;
+            collider2D.isTrigger = false;
+        }
     }
 
     private void Jump()
