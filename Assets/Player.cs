@@ -127,7 +127,7 @@ public class Player : MonoBehaviour
 
     private void DrawRay(Vector3 position)
     {
-        Gizmos.DrawRay(position + new Vector3(0, downWallCheckY, 0), new Vector2(0, -1) * 100f);
+        Gizmos.DrawRay(position + new Vector3(0, downWallCheckY, 0), new Vector2(0, -1) * 1.1f);
     }
 
     bool IsGroundCheckRay(Vector3 pos)

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 119921190}
   - component: {fileID: 119921189}
   - component: {fileID: 119921188}
+  - component: {fileID: 711192502}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -163,12 +164,24 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 512
-  downWallCheckY: -2.001
+  downWallCheckY: -2.1
   groundCheckOffsetX: 0.4
   bubble: {fileID: 448797218365540072, guid: 1c788648f80d5294db1df52eafe6193a, type: 3}
   bubbleSpawnPos: {fileID: 7156612519854105566}
   minX: -12.3
-  maxX: 12.3
+  maxX: 20
+--- !u!114 &711192502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 522924261565212386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5db18ee9ce21a634c9f0c3bc0da0df95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5210198225511595242
 GameObject:
   m_ObjectHideFlags: 0
