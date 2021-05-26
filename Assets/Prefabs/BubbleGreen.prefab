@@ -124,7 +124,10 @@ MonoBehaviour:
   gravityScale: -0.5
   randomX: 100
   randomY: 100
-  speed: -4
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  speed: 4
   moveFrame: 4
   caughtTarget: {fileID: 0}
   explosionTimer: 030000000300000003000000

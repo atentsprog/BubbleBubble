@@ -19,6 +19,7 @@ public class BubbleMissile : MonoBehaviour
     public float gravityScale = -0.5f;
     public float randomX = 1;
     public float randomY = 1;
+    public LayerMask wallLayer; // 벽과 충돌하는것으 확인하기 위해서 추가함.
     IEnumerator Start()
     {
         animator = GetComponent<Animator>();
@@ -28,7 +29,19 @@ public class BubbleMissile : MonoBehaviour
 
         for (int i = 0; i < moveFrame; i++)
         {
-            transform.Translate(speed, 0, 0);
+            var pos = transform.position;
+            pos.x += (speed * transform.forward.z);
+            //x방향으로 갈 수 있는 최대 지점을 광선을 쏘아서 확인하자.
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(transform.forward.z, 0), 100f, wallLayer); //LayerMask.NameToLayer("Wall")
+            if (hit.collider != null) // 충돌한 벽이 있다면 벽 충돌 지점까지만 이동하자.
+            {
+                if (transform.forward.z > 0)
+                    pos.x = Mathf.Min(pos.x, hit.point.x);
+                else
+                    pos.x = Mathf.Max(pos.x, hit.point.x);
+            }
+
+            transform.position = pos;
             yield return null;
         }
         rigidbody2D.gravityScale = gravityScale;

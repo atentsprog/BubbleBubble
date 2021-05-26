@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
             {
                 animator.Play("run");
                 var rotate = transform.rotation;
-                rotate.y = moveX > 0 ? 180 : 0;
+                rotate.y = moveX < 0 ? 180 : 0;
                 transform.rotation = rotate;
                 //spriteRenderer.flipX = moveX > 0;
             }
