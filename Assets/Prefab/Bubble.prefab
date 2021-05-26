@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3174203666797768753}
   - component: {fileID: 3174203666797768752}
   - component: {fileID: 278174944207661341}
+  - component: {fileID: 3372900268808685502}
   m_Layer: 7
   m_Name: Bubble
   m_TagString: Untagged
@@ -163,6 +164,7 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 512
+  state: 0
 --- !u!114 &278174944207661341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,3 +182,27 @@ MonoBehaviour:
   OnDisableLog: 0
   OnDestroyLog: 0
   StopOnLog: 0
+--- !u!114 &3372900268808685502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 448797218365540072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327cdf3400a9b8644b784858d425418f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  start:
+    prefab: {fileID: 0}
+    delayTime: 0
+  enable:
+    prefab: {fileID: 0}
+    delayTime: 0
+  disable:
+    prefab: {fileID: 0}
+    delayTime: 0
+  destroy:
+    prefab: {fileID: 7222398842586263350, guid: ef23f8024ea980246bbad507ed45df3e, type: 3}
+    delayTime: 0
