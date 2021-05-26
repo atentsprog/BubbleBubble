@@ -56,13 +56,34 @@ public class Player : MonoBehaviour
         }
     }
     bool ingDownJump = false;
+
+    public List<Collider2D> inCollider;
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Log.Print("T Enter " + collision.transform.name, OptionType.ShowCollideLog);
+        inCollider.Add(collision);
+    }
     private void OnTriggerExit2D(Collider2D collision)
     {
+        Log.Print("T Exit  " + collision.transform.name, OptionType.ShowCollideLog);
+        inCollider.Remove(collision);
         if (ingDownJump)
         {
             ingDownJump = false;
             collider2D.isTrigger = false;
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Log.Print("C Enter " + collision.transform.name, OptionType.ShowCollideLog);
+        inCollider.Add(collision.collider);
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        Log.Print("C Exit  " + collision.transform.name, OptionType.ShowCollideLog);
+        inCollider.Remove(collision.collider);
     }
 
     bool ingJump = false;
