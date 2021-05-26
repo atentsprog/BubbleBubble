@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6478110564178541363}
   - component: {fileID: 8294776365837938224}
   - component: {fileID: 6757569556035649167}
+  - component: {fileID: 5377270554018399046}
   m_Layer: 0
   m_Name: BubbleGreen
   m_TagString: Untagged
@@ -186,3 +187,27 @@ MonoBehaviour:
   OnDisableLog: 0
   OnDestroyLog: 0
   StopOnLog: 0
+--- !u!114 &5377270554018399046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3204347645493500726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327cdf3400a9b8644b784858d425418f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  start:
+    prefab: {fileID: 0}
+    delayTime: 0
+  enable:
+    prefab: {fileID: 0}
+    delayTime: 0
+  disable:
+    prefab: {fileID: 0}
+    delayTime: 0
+  destroy:
+    prefab: {fileID: 8819295067069287209, guid: c4a6766a347aaee46b7f4581fc39ac92, type: 3}
+    delayTime: 0

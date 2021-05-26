@@ -26,7 +26,7 @@ public class BubbleMissile : MonoBehaviour
         rigidbody2D = GetComponent<Rigidbody2D>();
         collider2D = GetComponent<Collider2D>();
         rigidbody2D.gravityScale = 0;
-
+        state = State.Fire;
         for (int i = 0; i < moveFrame; i++)
         {
             var pos = transform.position;
@@ -44,6 +44,7 @@ public class BubbleMissile : MonoBehaviour
             transform.position = pos;
             yield return null;
         }
+        state = State.FreeFly;
         rigidbody2D.gravityScale = gravityScale;
         rigidbody2D.AddForce(new Vector2(Random.Range(-randomX, randomX), Random.Range(-randomY, randomY)));
         // 중력장을 찾아 이동하자. -> 맵마다 달랐음.
@@ -65,26 +66,38 @@ public class BubbleMissile : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        //Debug.Log(other.transform.name + " Collision 부딛힘");
+        Debug.Log(other.transform.name + " Collision 부딛힘");
 
-        if (state == State.Normal)
+        switch (state)
         {
-            if (other.transform.tag == "Enemy")
-            {
-                state = BubbleMissile.State.Capture;
+            case State.Fire:
+                if (other.transform.tag == "Enemy")
+                {
+                    state = BubbleMissile.State.Capture;
 
-                //적을 감추고
-                //풍선이미지를 바꾸자.
-                // 풍선 현재 타입을 캡쳐로 설정.
-                other.transform.SetParent(transform);
-                other.transform.localPosition = Vector3.zero;
-                other.gameObject.SetActive(false);
-                caughtTarget = other.gameObject;
+                    //적을 감추고
+                    //풍선이미지를 바꾸자.
+                    // 풍선 현재 타입을 캡쳐로 설정.
+                    other.transform.SetParent(transform);
+                    other.transform.localPosition = Vector3.zero;
+                    other.gameObject.SetActive(false);
+                    caughtTarget = other.gameObject;
 
-                // 갖힌 적 타입에 따라 플레이 해야하는 애니메이션 이름 구하자.(지금은 하드 코딩)
-                StartCoroutine(BubbleExplosionTimerCo("EnemyA"));
-            }
+                    // 갖힌 적 타입에 따라 플레이 해야하는 애니메이션 이름 구하자.(지금은 하드 코딩)
+                    StartCoroutine(BubbleExplosionTimerCo("EnemyA"));
+                }
+                break;
+            case State.FreeFly:
+                {
+                    if (other.transform.tag == "Player")
+                    {
+                        //플레이어에게 부딪힌다면 터트리자.
+                        Destroy(gameObject);
+                    }
+                }
+                break;
         }
+
     }
     public GameObject caughtTarget; //catch잡은 겟
 
@@ -100,13 +113,18 @@ public class BubbleMissile : MonoBehaviour
         // 몬스터 해방.
         caughtTarget.transform.SetParent(null);
         caughtTarget.SetActive(true);
+
+        // 버블 없애자.
+        Destroy(gameObject);
     }
 
-    public State state = BubbleMissile.State.Normal;
+    public State state = BubbleMissile.State.Fire;
 
     public enum State
     {
-        Normal,
+        Fire,
+        FreeFly,
         Capture,
+        Explosion,
     }
 }
