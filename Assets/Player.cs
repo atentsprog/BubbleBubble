@@ -45,7 +45,7 @@ public class Player : MonoBehaviour
                 , new Vector2(0, -1), 100, wallLayer);
             if (hit.transform)
             {
-                Debug.Log($"{hit.point}, {hit.transform.name}");
+                //Debug.Log($"{hit.point}, {hit.transform.name}");
 
                 ingDownJump = true;
                 collider2D.isTrigger = true;
@@ -78,21 +78,18 @@ public class Player : MonoBehaviour
             bool isGround = IsGround();
             if (isGround)
             {
+                rigidbody2D.velocity = Vector2.zero;
                 rigidbody2D.AddForce(new Vector2(0, jumpForce));
                 collider2D.isTrigger = true; // 점프할때 벽을 뚫고 싶다.
             }
         }
     }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, new Vector2(0, -1) * 1.1f);
-    }
-
 
     public float groundCheckOffsetX = 0.4f;
     private bool IsGround()
     {
+        //return rigidbody2D.velocity.y == 0;
+
         // 밑으로 광선을 쏘아서 부딪히는게 있으면 우리는 바닥에 있다.
         // 자기위치, 그리고 좌우로 0.4f만큼 바닥이 있으면 나는 바닥에 있다.
 
@@ -109,6 +106,22 @@ public class Player : MonoBehaviour
 
         return false;
     }
+    private void OnDrawGizmos()
+    {
+        DrawRay(transform.position);
+
+        // 좌.
+        DrawRay(transform.position + new Vector3(-groundCheckOffsetX, 0, 0));
+            
+        // 우.
+        DrawRay(transform.position + new Vector3(groundCheckOffsetX, 0, 0));
+    }
+
+    private void DrawRay(Vector3 position)
+    {
+        Gizmos.DrawRay(position + new Vector3(0, downWallCheckY, 0), new Vector2(0, -1) * 100f);
+    }
+
     bool IsGroundCheckRay(Vector3 pos)
     {
         var hit = Physics2D.Raycast(pos, new Vector2(0, -1), 1.1f, wallLayer);
