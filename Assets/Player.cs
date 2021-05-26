@@ -35,6 +35,9 @@ public class Player : MonoBehaviour
     public float downWallCheckY = -2.1f;
     private void DownJump()
     {
+        if (ingJump)
+            return;
+
         // s키 누르면 아래로 점프
         if(Input.GetKeyDown(KeyCode.S))
         { 
