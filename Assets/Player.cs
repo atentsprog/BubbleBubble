@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     new public Collider2D collider2D;
     new public Rigidbody2D rigidbody2D;
     public float jumpForce = 100f;
-    public float wallOffset = 0.001f;
+    public float wallOffset = 0.02f;
     private void Awake()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
