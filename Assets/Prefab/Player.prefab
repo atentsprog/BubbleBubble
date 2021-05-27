@@ -162,11 +162,14 @@ MonoBehaviour:
   rigidbody2D: {fileID: 0}
   jumpForce: 1100
   wallOffset: 0.02
+  state: 0
   wallLayer:
     serializedVersion: 2
     m_Bits: 512
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   downWallCheckY: -2.1
-  inCollider: []
   groundCheckOffsetX: 0.4
   bubble: {fileID: 448797218365540072, guid: 1c788648f80d5294db1df52eafe6193a, type: 3}
   bubbleSpawnPos: {fileID: 7156612519854105566}

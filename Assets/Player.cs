@@ -124,6 +124,7 @@ public class Player : MonoBehaviour
     }
 
     public LayerMask wallLayer;
+    public LayerMask groundLayer;
     public float downWallCheckY = -2.1f;
     private void DownJump()
     {
@@ -139,7 +140,7 @@ public class Player : MonoBehaviour
                 //  아래로 광선을 쏘아서 벽이 있다면 아래로 점프를 하자
                 var hit = Physics2D.Raycast(
                     transform.position + new Vector3(0, downWallCheckY, 0)
-                    , new Vector2(0, -1), 100, wallLayer);
+                    , new Vector2(0, -1), 100, groundLayer);
                 if (hit.transform)
                 {
                     State = StateType.DownJump;
@@ -254,7 +255,7 @@ public class Player : MonoBehaviour
 
     bool IsGroundCheckRay(Vector3 pos)
     {
-        var hit = Physics2D.Raycast(pos, new Vector2(0, -1), 1.1f, wallLayer);
+        var hit = Physics2D.Raycast(pos, new Vector2(0, -1), 1.1f, groundLayer);
         if (hit.transform)
             return true;
 
