@@ -15,6 +15,7 @@ public enum OptionType
 {
     StartIndex = -1,
     ShowCollideLog,
+    Player상태변화로그,
     LastIndex
 }
 
