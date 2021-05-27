@@ -12,6 +12,29 @@ public class Player : MonoBehaviour
     new public Rigidbody2D rigidbody2D;
     public float jumpForce = 100f;
     public float wallOffset = 0.001f;
+    public enum StateType
+    {
+        Ground,
+        Jump,
+        DownJump,
+        DownJumpExitCollider,
+    }
+
+    // public이 아니지만 인스펙터에 노출
+    [SerializeField] StateType state = StateType.Ground;
+
+    StateType State
+    {
+        get { return state; }
+        set
+        {
+            Log.Print($"{state} -> {value}", OptionType.Player상태변화로그);
+            state = value;
+        }
+    }
+    //bool ingDownJump = false;
+    //bool ingJump = false;
+
     private void Awake()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
@@ -105,40 +128,45 @@ public class Player : MonoBehaviour
     private void DownJump()
     {
         // s키 누르면 아래로 점프
-        if (Input.GetKeyDown(KeyCode.S))
+        if (State == StateType.Ground)
         {
-            if (IsGround() == false)
-                return;
-
-            // 점프 가능한 상황인지 확인
-            //  아래로 광선을 쏘아서 벽이 있다면 아래로 점프를 하자
-            var hit = Physics2D.Raycast(
-                transform.position + new Vector3(0, downWallCheckY, 0)
-                , new Vector2(0, -1), 100, wallLayer);
-            if (hit.transform)
+            if (Input.GetKeyDown(KeyCode.S))
             {
-                //Debug.Log($"{hit.point}, {hit.transform.name}");
+                if (IsGround() == false)
+                    return;
 
-                ingDownJump = true;
-                collider2D.isTrigger = true;
+                // 점프 가능한 상황인지 확인
+                //  아래로 광선을 쏘아서 벽이 있다면 아래로 점프를 하자
+                var hit = Physics2D.Raycast(
+                    transform.position + new Vector3(0, downWallCheckY, 0)
+                    , new Vector2(0, -1), 100, wallLayer);
+                if (hit.transform)
+                {
+                    State = StateType.DownJump;
+                    collider2D.isTrigger = true;
+                }
             }
         }
     }
-    bool ingDownJump = false;
 
-    public List<Collider2D> inCollider;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Log.Print("T Enter " + collision.transform.name, OptionType.ShowCollideLog);
-        inCollider.Add(collision);
+
+        if(State == StateType.DownJumpExitCollider)
+        {
+            // 밑에 벽이 있다면 그라운드.(옆에 벽에 부딪힌것일 수도 있다. -> 옆에 벽에 부딪힌후 밑에 벽에 부 딪힌다면 총돌 신호가 1번만 온다)
+            // 벽과 바닥을 다른 타일로 만들어서 구분 해야한다.
+            if (IsGround())
+                State = StateType.Ground;
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         Log.Print("T Exit  " + collision.transform.name, OptionType.ShowCollideLog);
-        inCollider.Remove(collision);
-        if (ingDownJump)
+        if (State == StateType.DownJump)
         {
-            ingDownJump = false;
+            State = StateType.DownJumpExitCollider; // Ground혹은 밑으로 점프중.
             collider2D.isTrigger = false;
         }
     }
@@ -146,26 +174,28 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Log.Print("C Enter " + collision.transform.name, OptionType.ShowCollideLog);
-        inCollider.Add(collision.collider);
+        if(State == StateType.DownJumpExitCollider) // 아래 벽과 (옆+천장)벽을 분리 해야함
+        {
+            if (IsGround())
+                State = StateType.Ground;
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
         Log.Print("C Exit  " + collision.transform.name, OptionType.ShowCollideLog);
-        inCollider.Remove(collision.collider);
     }
 
-    bool ingJump = false;
     private void Jump()
     {
         // 낙하할때는 지면과 충돌하도록 isTrigger를 꺼주자.
-        if (ingJump)
+        if (State == StateType.Jump)
         {
             if (rigidbody2D.velocity.y < 0)
             {
                 if (IsGround())
                 {
-                    ingJump = false;
+                    State = StateType.Ground;
                     collider2D.isTrigger = false; // 점프하고 나서 뚫은 벽에 서고싶다.
                 }
             }
@@ -174,13 +204,13 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W)|| Input.GetKeyDown(KeyCode.UpArrow))
         {
             // 우리가 바닥에 붙어 있으면 점프 할 수 있게 하자.
-            bool isGround = IsGround();
-            if (isGround)
+            //bool isGround = IsGround();
+            if (State == StateType.Ground)
             {
                 rigidbody2D.velocity = Vector2.zero;
                 rigidbody2D.AddForce(new Vector2(0, jumpForce));
                 collider2D.isTrigger = true; // 점프할때 벽을 뚫고 싶다.
-                ingJump = true;
+                State = StateType.Jump;
             }
         }
     }

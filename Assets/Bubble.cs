@@ -80,14 +80,14 @@ public class Bubble : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Collision:" + collision.transform.name);
+        //Debug.Log("Collision:" + collision.transform.name);
 
         //버블이 플레이어에 닿으면 터트리자.
         OnTouchCoillision(collision.transform);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Trigger:" + collision.transform.name);
+        //Debug.Log("Trigger:" + collision.transform.name);
         OnTouchCoillision(collision.transform);
     }
 }
