@@ -9,17 +9,18 @@ public class Bubble : MonoBehaviour
     public int currentFrame = 0;
     public float speed = 0.7f;
     new public Rigidbody2D rigidbody2D;
-    new public Collider2D collider2D;
+    new public CircleCollider2D collider2D;
     public float gravityScale = -0.7f;
     // 앞쪽 방향으로 이동., 6프레임 움직이고 나서 위로 이동(중력에 의해)
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
-        collider2D = GetComponent<Collider2D>();
+        collider2D = GetComponent<CircleCollider2D>();
         rigidbody2D.gravityScale = 0;
     }
 
     public LayerMask wallLayer;
+    public LayerMask playerLayer;
     // 벽 뚫는 현상 수정되었음, 
     // 벽과 이미 충돌한상태로 생성되면 충돌되지 않음 <- 이 상황에선 버블이 터져야함.
     private void FixedUpdate()
@@ -53,16 +54,19 @@ public class Bubble : MonoBehaviour
         }
         else
         {
-            state = State.FreeFly;
-            rigidbody2D.gravityScale = gravityScale;
-            enabled = false;
-
             // 플레이어와 닿아 있다면 거품을 터트리자.
-            //-> 방법1 )간단하게 컬라이더를 껐다 켜는것으로 감지 가능
-            collider2D.enabled = false;
-            collider2D.enabled = true;
-
-            // 방법2)플레이어와의 거리를 확인해서 터트리자(번거로워서 구현안함)
+            var allCollides = Physics2D.OverlapCircleAll(transform.position, collider2D.radius, playerLayer);
+            if(allCollides.Length > 0)
+            {
+                Explosion();
+            }
+            else
+            { 
+                collider2D.isTrigger = false;
+                state = State.FreeFly;
+                rigidbody2D.gravityScale = gravityScale;
+                enabled = false;
+            }
         }
     }
 
@@ -82,11 +86,17 @@ public class Bubble : MonoBehaviour
         {
             if (tr.CompareTag("Player"))
             {
-                // 플레이어.
-                Destroy(gameObject);
+                // 플레이어다 버블 폭발시키자.
+                Explosion();
             }
         }
     }
+
+    private void Explosion()
+    {
+        Destroy(gameObject);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //Debug.Log("Collision:" + collision.transform.name);
