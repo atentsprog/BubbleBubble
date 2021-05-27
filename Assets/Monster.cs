@@ -21,30 +21,78 @@ public class Monster : MonoBehaviour
     public LayerMask wallLayer;
     public float groundCheclRayLength = 1.5f;
     public float wallCheclRayLength = 1.1f;
-    
+
+    public float jumpRatio = 0.3f;
+    public float jumpForce = 1f;
+    public enum StateType
+    {
+        Run,
+        Jump,
+        Die
+    }
+    public StateType state = StateType.Run;
     private void Update()
     {
         Debug.Assert(groundLayer > 0, "그라운드 레이어를 설정해주세요");
         Debug.Assert(wallCheclRayLength > 0, "벽 레이어를 설정해주세요");
-        // 절벽 체크
-        int collideCount = collider2D.Raycast(new Vector2(transform.forward.z, -1), hits, groundCheclRayLength, groundLayer);
-        if (collideCount == 0) // 바닥이 없다면 방향 바꾸기.
-        {
-            // 절벽이다.
-            ChangeRotation();
-        }
 
-        // 벽 체크
-        collideCount = collider2D.Raycast(new Vector2(transform.forward.z, 0), hits, wallCheclRayLength, wallLayer);
-        if (collideCount > 0) // 벽이 1개 이상 있다면 방향 바꾸기.
+        if (state == StateType.Run)
         {
-            // 절벽이다.
-            ChangeRotation();
+            // 절벽 체크
+            int collideCount = collider2D.Raycast(new Vector2(transform.forward.z, -1), hits, groundCheclRayLength, groundLayer);
+            if (collideCount == 0) // 바닥이 없다면 방향 바꾸기.
+            {
+                // 절벽이다.
+                if (Random.Range(0, 1f) < jumpRatio)
+                {
+                    // 점프
+                    state = StateType.Jump;
+                    rigidbody2D.velocity = Vector2.zero;
+                    rigidbody2D.AddForce(new Vector2(0, jumpForce));
+                    collider2D.isTrigger = true;
+                }
+                else
+                {
+                    ChangeRotation();
+                }
+            }
+
+            // 벽 체크
+            collideCount = collider2D.Raycast(new Vector2(transform.forward.z, 0), hits, wallCheclRayLength, wallLayer);
+            if (collideCount > 0) // 벽이 1개 이상 있다면 방향 바꾸기.
+            {
+                // 절벽이다.
+                ChangeRotation();
+            }
         }
 
         var pos = transform.position;
         pos.x += speed * transform.forward.z;
         transform.position = pos;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (IsGround())
+        {
+            state = StateType.Run;
+            collider2D.isTrigger = false;
+        }
+    }
+
+    private bool IsGround()
+    {
+        var hit = Physics2D.Raycast(transform.position, new Vector2(0, -1), 1.1f, groundLayer);
+        if (hit.transform)
+            return true;
+
+        return false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        state = StateType.Run;
+        collider2D.isTrigger = false;
     }
 
     private void OnDrawGizmos()
