@@ -104,12 +104,12 @@ public class Player : MonoBehaviour
     public float downWallCheckY = -2.1f;
     private void DownJump()
     {
-        if (ingJump)
-            return;
-
         // s키 누르면 아래로 점프
-        if(Input.GetKeyDown(KeyCode.S))
-        { 
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            if (IsGround() == false)
+                return;
+
             // 점프 가능한 상황인지 확인
             //  아래로 광선을 쏘아서 벽이 있다면 아래로 점프를 하자
             var hit = Physics2D.Raycast(
@@ -163,11 +163,13 @@ public class Player : MonoBehaviour
         {
             if (rigidbody2D.velocity.y < 0)
             {
-                ingJump = false;
-                collider2D.isTrigger = false; // 점프하고 나서 뚫은 벽에 서고싶다.
+                if (IsGround())
+                {
+                    ingJump = false;
+                    collider2D.isTrigger = false; // 점프하고 나서 뚫은 벽에 서고싶다.
+                }
             }
         }
-
         // 방향위혹은 W키 누르면 점프 하자.
         if (Input.GetKeyDown(KeyCode.W)|| Input.GetKeyDown(KeyCode.UpArrow))
         {
